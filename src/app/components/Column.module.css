@@ -1,0 +1,12 @@
+.columnContainer {
+    width: 300px;
+    margin: 8px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    padding: 16px;
+    height: fit-content;
+}
+
+.columnTitle {
+    text-align: center;
+}
