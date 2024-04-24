@@ -1,23 +1,21 @@
-.boardContainer {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    overflow-x: auto;
-}
-
 /* login.module.css */
-.kanbanContainer {
+.loginContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100vh;
     background-color: #3C5B6F;
     margin:-8px
   }
   
+  .headerText{
+    color:white
+  }
+
   .form {
     padding: 20px;
-    background: white;
+    background: #153448;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     width: 100%;
@@ -28,18 +26,21 @@
   
   .inputGroup {
     margin-bottom: 20px;
+    color:white;
   }
   
   .input {
     width: 95%;
     padding: 10px;
+    margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    color:white;
   }
   
   .button {
     padding: 10px;
-    background-color: #0070f3;
+    background-color: #948979;
     color: white;
     border: none;
     border-radius: 4px;
@@ -47,7 +48,7 @@
   }
   
   .button:hover {
-    background-color: #0056b3;
+    background-color: #DFD0B8;
   }
   
   @media (max-width: 600px) {

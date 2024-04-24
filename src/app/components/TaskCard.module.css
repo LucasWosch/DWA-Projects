@@ -1,5 +1,5 @@
 .card {
-    background-color: white;
+    background-color: #3c5b6f;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     padding: 16px;
@@ -15,11 +15,34 @@
 }
 
 .deleteButton {
-    background-color: red;
+    background-color: #DFD0B8;
     color: white;
     border: none;
     border-radius: 4px;
     padding: 8px 12px;
     cursor: pointer;
     font-weight: bold;
+}
+.showModalButton {
+    background-color: #948979;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.selectField {
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 2px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.selectField:hover,
+.selectField:focus {
 }

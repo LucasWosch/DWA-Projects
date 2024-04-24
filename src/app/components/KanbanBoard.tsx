@@ -9,10 +9,12 @@ const KanbanBoard: React.FC = () => {
     const columns = useStore(state => state.columns); // Supondo que você tem uma estrutura de colunas
 
     return (
-        <div className={styles.boardContainer}>
-            {columns.map(column => (
-                <Column key={column.id} title={column.title} taskIds={column.taskIds} />
-            ))}
+        <div className={styles.kanbanContainer}>
+            <div className={styles.boardContainer}>
+                {columns.map(column => (
+                    <Column id={column.id} title={column.title} taskIds={column.taskIds} />
+                ))}
+            </div>
         </div>
     );
 };

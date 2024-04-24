@@ -1,12 +1,44 @@
 .columnContainer {
     width: 300px;
     margin: 8px;
-    background-color: #f4f4f4;
+    background-color: #153448;
     border-radius: 8px;
     padding: 16px;
     height: fit-content;
+    color: #FFFFFF;
 }
 
 .columnTitle {
     text-align: center;
 }
+/* Estilos existentes para a coluna aqui... */
+
+.formContainer {
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.inputField {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.addButton {
+    width: 100%;
+    padding: 10px;
+    background-color: #948979;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.addButton:hover {
+    background-color: #DFD0B8;
+}
+
