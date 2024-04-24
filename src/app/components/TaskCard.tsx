@@ -27,7 +27,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, currentColumnId }) => {
             <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
                 <h2>{task.title}</h2>
                 <p>{task.description || "No description provided."}</p>
-                <select value={currentColumnId} onChange={handleMoveTask}>
+                <select value={currentColumnId} onChange={handleMoveTask} className={styles.selectField}>
                     {columns.map(column => (
                         <option key={column.id} value={column.id}>{column.title}</option>
                     ))}
