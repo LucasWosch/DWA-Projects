@@ -9,8 +9,8 @@ interface KanbanState {
     columns: Column[];
     addTask: (task: Task, columnId: string) => void;
     removeTask: (taskId: string) => void;
-    addColumn: (column: Column) => void;
     moveTask: (taskId: string, fromColumnId: string, toColumnId: string) => void;
+    updateTaskDescription: (taskId: string, description: string) => void;
 }
 
 export const useStore = create<KanbanState>((set) => ({
@@ -33,7 +33,6 @@ export const useStore = create<KanbanState>((set) => ({
     removeTask: (taskId) => set((state) => ({
         tasks: state.tasks.filter(task => task.id !== taskId)
     })),
-    addColumn: (column) => set((state) => ({ columns: [...state.columns, column] })),
     moveTask: (taskId, fromColumnId, toColumnId) => set(state => {
         // Encontrar as colunas de origem e destino
         const fromColumn = state.columns.find(column => column.id === fromColumnId);
@@ -61,4 +60,9 @@ export const useStore = create<KanbanState>((set) => ({
         // Retornar o novo estado com as colunas atualizadas
         return { ...state, columns: newColumns };
     }),
+    updateTaskDescription: (taskId, description) => set(state => ({
+        tasks: state.tasks.map(task => 
+            task.id === taskId ? { ...task, description: description } : task
+        )
+    })),
 }));

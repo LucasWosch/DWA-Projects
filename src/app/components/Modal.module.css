@@ -19,6 +19,34 @@
     position: relative;
     width: 80%;
     max-width: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.textarea {
+    width: calc(100vw);
+    min-width: calc(100vw);
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px; /* Espaço antes dos botões */
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    resize: none; /* Opcional: Impede o usuário de redimensionar o textarea */
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.saveButton {
+    padding: 8px 16px;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .closeButton {
@@ -29,5 +57,4 @@
     background: none;
     cursor: pointer;
     font-size: 20px;
-    color:white;
 }
