@@ -32,7 +32,7 @@ export const useStore = create<KanbanState>((set) => ({
             const columns = data.data.map((column: any) => ({
                 id: column.id,
                 title: column.title,
-                taskIds: column.tasks.map((task: Task) => task.id),
+                taskIds: column.taskIds,
             }));
             set({ columns, tasks });
         }
@@ -43,14 +43,14 @@ export const useStore = create<KanbanState>((set) => ({
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(task),
+            body: JSON.stringify({ ...task, columnId }),
         });
         const data = await res.json();
         if (data.success) {
             set((state) => {
                 const updatedColumns = state.columns.map(column => {
                     if (column.id === columnId) {
-                        return { ...column, taskIds: [...column.taskIds, task.id] };
+                        return { ...column, taskIds: [...column.taskIds, data.data.id] };
                     }
                     return column;
                 });
@@ -116,7 +116,8 @@ export const useStore = create<KanbanState>((set) => ({
     },
     addColumn: async (title) => {
         const newColumn = {
-            id: `col-${Math.random().toString(36).substr(2, 9)}`,
+            _id: `col-${Math.random().toString(36).substr(2, 9)}`, // Use _id para o MongoDB
+            id: `col-${Math.random().toString(36).substr(2, 9)}`, // Ensure both id and _id are set
             title,
             taskIds: []
         };

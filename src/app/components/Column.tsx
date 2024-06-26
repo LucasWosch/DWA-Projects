@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styles from './Column.module.css';
 import { useStore } from '../store/useStore';
 import TaskCard from './TaskCard';
@@ -11,18 +11,13 @@ interface ColumnProps {
 }
 
 const Column: React.FC<ColumnProps> = ({ title, taskIds, id }) => {
-    const tasks = useStore(state => state.tasks.filter(task => taskIds.includes(task.id)));
-    const fetchTasks = useStore(state => state.fetchTasks);
-
-    useEffect(() => {
-        fetchTasks();
-    }, [fetchTasks]);
+    const tasks = useStore(state => state.tasks.filter(task => taskIds.includes(task._id)));
 
     return (
         <div className={styles.columnContainer}>
             <h2 className={styles.columnTitle}>{title}</h2>
             {tasks.map(task => (
-                <TaskCard key={task.id} task={task} currentColumnId={id} />
+                <TaskCard key={task._id} task={task} currentColumnId={id} />
             ))}
             <TaskForm columnId={id} />
         </div>

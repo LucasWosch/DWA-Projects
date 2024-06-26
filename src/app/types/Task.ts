@@ -1,6 +1,6 @@
-// src/types/Task.ts
 export interface Task {
+    _id: string;
     id: string;
     title: string;
-    description?: string; // Opcional, você pode adicionar mais campos conforme necessário
+    description: string;
 }

@@ -1,4 +1,3 @@
-// src/components/TaskForm.tsx
 import React, { useState } from 'react';
 import { useStore } from '../store/useStore';
 import { Task } from '../types/Task';
@@ -13,7 +12,8 @@ const TaskForm = ({ columnId }: { columnId: string }) => {
         e.preventDefault();
         if (!title) return;
         const newTask: Task = {
-            id: `task-${Math.random().toString(36).substr(2, 9)}`,
+            _id: `task-${Math.random().toString(36).substr(2, 9)}`,
+            id: `task-${Math.random().toString(36).substr(2, 9)}`, // Ensure both id and _id are set
             title,
             description,
         };

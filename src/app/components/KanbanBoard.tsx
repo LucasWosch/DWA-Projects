@@ -12,7 +12,7 @@ const KanbanBoard: React.FC = () => {
     const [newColumnTitle, setNewColumnTitle] = useState('');
 
     useEffect(() => {
-        fetchColumns(); // Busca as colunas ao montar o componente
+        fetchColumns(); // Busca as colunas e tasks ao montar o componente
     }, [fetchColumns]);
 
     const handleAddColumn = () => {

@@ -21,21 +21,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }));
         res.status(200).json({ success: true, data: columnsWithTasks });
       } catch (error) {
-        res.status(400).json({ success: false, error: "Erro" });
+        res.status(400).json({ success: false, error: error });
       }
       break;
     case 'POST':
       try {
         const { id, title, taskIds } = req.body;
-        const column = new Column({ id, title, taskIds });
+        const column = new Column({ _id: id, id, title, taskIds });
         await column.save();
         res.status(201).json({ success: true, data: column });
       } catch (error) {
-        res.status(400).json({ success: false, error: "Erro" });
+        res.status(400).json({ success: false, error: error });
       }
       break;
     default:
-      res.status(400).json({ success: false, error: 'Method not allowed' });
+      res.status(400).json({ success: false });
       break;
   }
 }

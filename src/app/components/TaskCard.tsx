@@ -1,4 +1,3 @@
-// src/components/TaskCard.tsx
 import React, { useState } from 'react';
 import styles from './TaskCard.module.css';
 import { Task } from '../types/Task';
@@ -20,16 +19,16 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, currentColumnId }) => {
 
     const handleMoveTask = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newColumnId = e.target.value;
-        moveTask(task.id, currentColumnId, newColumnId);
+        moveTask(task._id, currentColumnId, newColumnId);
     };
 
     const handleSaveDescription = () => {
-        updateTaskDescription(task.id, description);
+        updateTaskDescription(task._id, description);
         setModalOpen(false); // Optionally close the modal on save
     };
 
     const handleRemoveTask = () => {
-        removeTask(task.id, currentColumnId);
+        removeTask(task._id, currentColumnId);
     };
 
     return (
