@@ -1,6 +1,5 @@
 'use client';
 
-// pages/index.tsx
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './login.module.css';
@@ -10,8 +9,22 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const router = useRouter();
 
-  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    // Salvar log de acesso no MongoDB
+    try {
+      await fetch('/api/logs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+    } catch (error) {
+      console.error('Failed to log access:', error);
+    }
+
     router.push('/kanban');
   };
 

@@ -59,8 +59,12 @@ export const useStore = create<KanbanState>((set) => ({
         }
     },
     removeTask: async (taskId, columnId) => {
-        const res = await fetch(`/api/tasks/${taskId}`, {
+        const res = await fetch(`/api/tasks/`, {
             method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ taskId }),
         });
         const data = await res.json();
         if (data.success) {
@@ -75,35 +79,47 @@ export const useStore = create<KanbanState>((set) => ({
             });
         }
     },
-    moveTask: (taskId, fromColumnId, toColumnId) => set(state => {
-        const fromColumn = state.columns.find(column => column.id === fromColumnId);
-        const toColumn = state.columns.find(column => column.id === toColumnId);
-
-        if (!fromColumn || !toColumn) {
-            return state;
-        }
-
-        const newFromTaskIds = fromColumn.taskIds.filter(id => id !== taskId);
-        const newToTaskIds = [...toColumn.taskIds, taskId];
-
-        const newColumns = state.columns.map(column => {
-            if (column.id === fromColumnId) {
-                return { ...column, taskIds: newFromTaskIds };
-            } else if (column.id === toColumnId) {
-                return { ...column, taskIds: newToTaskIds };
-            }
-            return column;
-        });
-
-        return { ...state, columns: newColumns };
-    }),
-    updateTaskDescription: async (taskId, description) => {
-        const res = await fetch(`/api/tasks/${taskId}`, {
+    moveTask: async (taskId, fromColumnId, toColumnId) => {
+        const res = await fetch('/api/tasks/move', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ description }),
+            body: JSON.stringify({ taskId, fromColumnId, toColumnId }),
+        });
+        const data = await res.json();
+        if (data.success) {
+            set(state => {
+                const fromColumn = state.columns.find(column => column.id === fromColumnId);
+                const toColumn = state.columns.find(column => column.id === toColumnId);
+
+                if (!fromColumn || !toColumn) {
+                    return state;
+                }
+
+                const newFromTaskIds = fromColumn.taskIds.filter(id => id !== taskId);
+                const newToTaskIds = [...toColumn.taskIds, taskId];
+
+                const newColumns = state.columns.map(column => {
+                    if (column.id === fromColumnId) {
+                        return { ...column, taskIds: newFromTaskIds };
+                    } else if (column.id === toColumnId) {
+                        return { ...column, taskIds: newToTaskIds };
+                    }
+                    return column;
+                });
+
+                return { ...state, columns: newColumns };
+            });
+        }
+    },
+    updateTaskDescription: async (taskId, description) => {
+        const res = await fetch(`/api/tasks/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ taskId, description}),
         });
         const data = await res.json();
         if (data.success) {

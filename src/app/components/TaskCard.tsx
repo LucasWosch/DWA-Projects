@@ -17,18 +17,18 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, currentColumnId }) => {
     const moveTask = useStore(state => state.moveTask);
     const removeTask = useStore(state => state.removeTask);
 
-    const handleMoveTask = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleMoveTask = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newColumnId = e.target.value;
-        moveTask(task._id, currentColumnId, newColumnId);
+        await moveTask(task.id, currentColumnId, newColumnId);
     };
 
-    const handleSaveDescription = () => {
-        updateTaskDescription(task._id, description);
+    const handleSaveDescription = async () => {
+        await updateTaskDescription(task.id, description);
         setModalOpen(false); // Optionally close the modal on save
     };
 
-    const handleRemoveTask = () => {
-        removeTask(task._id, currentColumnId);
+    const handleRemoveTask = async () => {
+        await removeTask(task.id, currentColumnId);
     };
 
     return (
