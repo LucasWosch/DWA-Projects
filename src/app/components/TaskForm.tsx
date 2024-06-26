@@ -29,17 +29,17 @@ const TaskForm = ({ columnId }: { columnId: string }) => {
                 className={styles.inputField}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Add a new task"
+                placeholder="Titulo da Tarefa"
                 required
             />
             <textarea
                 className={styles.inputField}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Add a description"
+                placeholder="Descrição da Tarefa"
                 required
             />
-            <button type="submit" className={styles.addButton}>Add Task</button>
+            <button type="submit" className={styles.addButton}>Adicionar Tarefa</button>
         </form>
     );
 };

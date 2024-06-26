@@ -34,6 +34,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(400).json({ success: false, error: error });
       }
       break;
+      case 'DELETE':
+        try {
+          const { columnId } = req.body;
+  
+          // Encontrar a coluna
+          const column = await Column.findOneAndDelete(
+            { id: columnId });
+          if (!column) {
+            return res.status(404).json({ success: false, error: 'Column not found' });
+          }
+  
+          // Deletar todas as tarefas associadas a essa coluna
+          await Task.deleteMany({ _id: { $in: column.taskIds } });
+  
+          res.status(200).json({ success: true, data: column });
+        } catch (error) {
+          res.status(400).json({ success: false, error: error });
+        }
+        break;
     default:
       res.status(400).json({ success: false });
       break;

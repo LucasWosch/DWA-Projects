@@ -12,6 +12,7 @@ interface KanbanState {
     moveTask: (taskId: string, fromColumnId: string, toColumnId: string) => void;
     updateTaskDescription: (taskId: string, description: string) => void;
     addColumn: (title: string) => void;
+    deleteColumn: (columnId: string) => void;
 }
 
 export const useStore = create<KanbanState>((set) => ({
@@ -64,7 +65,7 @@ export const useStore = create<KanbanState>((set) => ({
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ taskId }),
+            body: JSON.stringify({ taskId, columnId }),
         });
         const data = await res.json();
         if (data.success) {
@@ -119,7 +120,7 @@ export const useStore = create<KanbanState>((set) => ({
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ taskId, description}),
+            body: JSON.stringify({ taskId, description }),
         });
         const data = await res.json();
         if (data.success) {
@@ -148,6 +149,22 @@ export const useStore = create<KanbanState>((set) => ({
         if (data.success) {
             set((state) => ({
                 columns: [...state.columns, data.data]
+            }));
+        }
+    },
+    deleteColumn: async (columnId) => {
+        const res = await fetch(`/api/columns/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ columnId }),
+        });
+        const data = await res.json();
+        if (data.success) {
+            set((state) => ({
+                columns: state.columns.filter(column => column.id !== columnId),
+                tasks: state.tasks.filter(task => !data.data.taskIds.includes(task.id)),
             }));
         }
     },
