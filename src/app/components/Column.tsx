@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './Column.module.css';
 import { useStore } from '../store/useStore';
 import TaskCard from './TaskCard';
 import TaskForm from './TaskForm';
-import { Task } from '../types/Task';
 
 interface ColumnProps {
     title: string;
@@ -11,9 +10,13 @@ interface ColumnProps {
     id: string;  // Certifique-se de passar o id da coluna
 }
 
-
 const Column: React.FC<ColumnProps> = ({ title, taskIds, id }) => {
     const tasks = useStore(state => state.tasks.filter(task => taskIds.includes(task.id)));
+    const fetchTasks = useStore(state => state.fetchTasks);
+
+    useEffect(() => {
+        fetchTasks();
+    }, [fetchTasks]);
 
     return (
         <div className={styles.columnContainer}>

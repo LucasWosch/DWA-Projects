@@ -1,3 +1,4 @@
+// src/components/TaskCard.tsx
 import React, { useState } from 'react';
 import styles from './TaskCard.module.css';
 import { Task } from '../types/Task';
@@ -27,6 +28,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, currentColumnId }) => {
         setModalOpen(false); // Optionally close the modal on save
     };
 
+    const handleRemoveTask = () => {
+        removeTask(task.id, currentColumnId);
+    };
+
     return (
         <div className={styles.card}>
             <h3 className={styles.title}>{task.title}</h3>
@@ -51,14 +56,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, currentColumnId }) => {
                 <select 
                     className={styles.selectField} // Certifique-se de ter essa classe definida para o select
                     value={currentColumnId} 
-                    onChange={(e) => moveTask(task.id, currentColumnId, e.target.value)}
+                    onChange={handleMoveTask}
                 >
                     {columns.map(column => (
                         <option key={column.id} value={column.id}>{column.title}</option>
                     ))}
                 </select>
             </Modal>
-            <button className={styles.deleteButton} onClick={() => removeTask(task.id)}>Delete</button>
+            <button className={styles.deleteButton} onClick={handleRemoveTask}>Delete</button>
         </div>
     );
 };

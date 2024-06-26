@@ -1,53 +1,91 @@
-
-// src/store/useStore.ts
 import create from 'zustand';
-import { Task } from '../types/Task';  // Importar Task e Column
-import { Column } from '../types/Column';  // Importar Task e Column
+import { Task } from '../types/Task';
+import { Column } from '../types/Column';
 
 interface KanbanState {
     tasks: Task[];
     columns: Column[];
+    fetchTasks: () => void;
+    fetchColumns: () => void;
     addTask: (task: Task, columnId: string) => void;
-    removeTask: (taskId: string) => void;
+    removeTask: (taskId: string, columnId: string) => void;
     moveTask: (taskId: string, fromColumnId: string, toColumnId: string) => void;
     updateTaskDescription: (taskId: string, description: string) => void;
+    addColumn: (title: string) => void;
 }
 
 export const useStore = create<KanbanState>((set) => ({
-    tasks: [
-    ],
-    columns: [
-        { id: 'col-1', title: 'A fazer', taskIds: [] },
-        { id: 'col-2', title: 'Fazendo', taskIds: [] },
-        { id: 'col-3', title: 'Concluida', taskIds: [] }
-    ],
-    addTask: (task, columnId) => set((state) => {
-        const updatedColumns = state.columns.map(column => {
-            if (column.id === columnId) {
-                return { ...column, taskIds: [...column.taskIds, task.id] };
-            }
-            return column;
+    tasks: [],
+    columns: [],
+    fetchTasks: async () => {
+        const res = await fetch('/api/tasks');
+        const data = await res.json();
+        if (data.success) {
+            set({ tasks: data.data });
+        }
+    },
+    fetchColumns: async () => {
+        const res = await fetch('/api/columns');
+        const data = await res.json();
+        if (data.success) {
+            const tasks = data.data.flatMap((column: any) => column.tasks);
+            const columns = data.data.map((column: any) => ({
+                id: column.id,
+                title: column.title,
+                taskIds: column.tasks.map((task: Task) => task.id),
+            }));
+            set({ columns, tasks });
+        }
+    },
+    addTask: async (task, columnId) => {
+        const res = await fetch('/api/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(task),
         });
-        return { tasks: [...state.tasks, task], columns: updatedColumns };
-    }),
-    removeTask: (taskId) => set((state) => ({
-        tasks: state.tasks.filter(task => task.id !== taskId)
-    })),
+        const data = await res.json();
+        if (data.success) {
+            set((state) => {
+                const updatedColumns = state.columns.map(column => {
+                    if (column.id === columnId) {
+                        return { ...column, taskIds: [...column.taskIds, task.id] };
+                    }
+                    return column;
+                });
+                return { tasks: [...state.tasks, data.data], columns: updatedColumns };
+            });
+        }
+    },
+    removeTask: async (taskId, columnId) => {
+        const res = await fetch(`/api/tasks/${taskId}`, {
+            method: 'DELETE',
+        });
+        const data = await res.json();
+        if (data.success) {
+            set((state) => {
+                const updatedColumns = state.columns.map(column => {
+                    if (column.id === columnId) {
+                        return { ...column, taskIds: column.taskIds.filter(id => id !== taskId) };
+                    }
+                    return column;
+                });
+                return { tasks: state.tasks.filter(task => task.id !== taskId), columns: updatedColumns };
+            });
+        }
+    },
     moveTask: (taskId, fromColumnId, toColumnId) => set(state => {
-        // Encontrar as colunas de origem e destino
         const fromColumn = state.columns.find(column => column.id === fromColumnId);
         const toColumn = state.columns.find(column => column.id === toColumnId);
 
         if (!fromColumn || !toColumn) {
-            // Se uma das colunas não for encontrada, retorne o estado atual sem mudanças
             return state;
         }
 
-        // Remover taskId da coluna de origem e adicionar na coluna de destino
         const newFromTaskIds = fromColumn.taskIds.filter(id => id !== taskId);
         const newToTaskIds = [...toColumn.taskIds, taskId];
 
-        // Criar novas colunas com a atualização das tarefas
         const newColumns = state.columns.map(column => {
             if (column.id === fromColumnId) {
                 return { ...column, taskIds: newFromTaskIds };
@@ -57,12 +95,43 @@ export const useStore = create<KanbanState>((set) => ({
             return column;
         });
 
-        // Retornar o novo estado com as colunas atualizadas
         return { ...state, columns: newColumns };
     }),
-    updateTaskDescription: (taskId, description) => set(state => ({
-        tasks: state.tasks.map(task => 
-            task.id === taskId ? { ...task, description: description } : task
-        )
-    })),
+    updateTaskDescription: async (taskId, description) => {
+        const res = await fetch(`/api/tasks/${taskId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ description }),
+        });
+        const data = await res.json();
+        if (data.success) {
+            set(state => ({
+                tasks: state.tasks.map(task => 
+                    task.id === taskId ? { ...task, description: description } : task
+                )
+            }));
+        }
+    },
+    addColumn: async (title) => {
+        const newColumn = {
+            id: `col-${Math.random().toString(36).substr(2, 9)}`,
+            title,
+            taskIds: []
+        };
+        const res = await fetch('/api/columns', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newColumn),
+        });
+        const data = await res.json();
+        if (data.success) {
+            set((state) => ({
+                columns: [...state.columns, data.data]
+            }));
+        }
+    },
 }));
